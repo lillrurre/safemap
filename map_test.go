@@ -7,6 +7,7 @@ import (
 )
 
 func TestNewMap(t *testing.T) {
+	t.Parallel()
 	type testType struct{}
 	safeMap := NewMap[int, []*testType]()
 
@@ -24,6 +25,7 @@ func TestNewMap(t *testing.T) {
 }
 
 func TestSafeMap_Store(t *testing.T) {
+	t.Parallel()
 	safeMap := NewMap[string, string]()
 
 	if s, ok := safeMap.m["foo"]; ok || s != "" {
@@ -38,6 +40,7 @@ func TestSafeMap_Store(t *testing.T) {
 }
 
 func TestSafeMap_Load(t *testing.T) {
+	t.Parallel()
 	safeMap := NewMap[string, string]()
 	val := safeMap.Load("foo")
 	if val != "" {
@@ -51,6 +54,7 @@ func TestSafeMap_Load(t *testing.T) {
 }
 
 func TestSafeMap_Delete(t *testing.T) {
+	t.Parallel()
 	safeMap := NewMap[string, string]()
 	safeMap.m["foo"] = "bar"
 	safeMap.m["rab"] = "baz"
@@ -64,6 +68,7 @@ func TestSafeMap_Delete(t *testing.T) {
 }
 
 func TestSafeMap_LoadBool(t *testing.T) {
+	t.Parallel()
 	safeMap := NewMap[string, string]()
 	val, ok := safeMap.LoadBool("foo")
 	if ok || val != "" {
@@ -77,6 +82,7 @@ func TestSafeMap_LoadBool(t *testing.T) {
 }
 
 func TestSafeMap_Swap(t *testing.T) {
+	t.Parallel()
 	safeMap := NewMap[string, string]()
 	safeMap.m["foo"] = "bar"
 	if val, ok := safeMap.m["foo"]; !ok || val != "bar" {
@@ -89,6 +95,7 @@ func TestSafeMap_Swap(t *testing.T) {
 }
 
 func TestSafeMap_Range(t *testing.T) {
+	t.Parallel()
 	expected := []string{"foo=bar", "rab=baz", "lol=lol"}
 
 	// Test case where func returns true
@@ -122,6 +129,7 @@ func TestSafeMap_Range(t *testing.T) {
 }
 
 func TestSafeMap_RangeValue(t *testing.T) {
+	t.Parallel()
 	expected := []string{"bar", "baz", "lol"}
 
 	// Test case where func returns true
@@ -154,6 +162,7 @@ func TestSafeMap_RangeValue(t *testing.T) {
 }
 
 func TestSafeMap_RangeKey(t *testing.T) {
+	t.Parallel()
 	expected := []string{"foo", "rab", "lol"}
 
 	// Test case where func returns true
@@ -186,6 +195,7 @@ func TestSafeMap_RangeKey(t *testing.T) {
 }
 
 func TestSafeMap_Len(t *testing.T) {
+	t.Parallel()
 	safeMap := NewMap[string, string]()
 	if safeMap.Len() != 0 {
 		t.Errorf("Expected 0, got %d", safeMap.Len())
