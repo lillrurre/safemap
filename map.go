@@ -46,7 +46,17 @@ func (s *SafeMap[T, V]) Range(f func(T, V) bool) {
 	}
 }
 
-func (s *SafeMap[T, V]) Swap(key any, value any) (previous any, loaded bool) {
+func (s *SafeMap[T, V]) RangeValue(f func(V) bool) {
+	s.mut.RLock()
+	defer s.mut.RUnlock()
+	for _, v := range s.m {
+		if !f(v) {
+			break
+		}
+	}
+}
+
+func (s *SafeMap[T, V]) Swap(key T, value V) (previous V, loaded bool) {
 	s.mut.Lock()
 	defer s.mut.Unlock()
 	previous, loaded = s.m[key]
