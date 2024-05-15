@@ -69,10 +69,29 @@ func (s *SafeMap[T, V]) RangeValue(f func(V) bool) {
 	}
 }
 
+// RangeKey loops over the keys in the map and runs the function.
+// Works like Range, but it does only use the key as parameter.
+func (s *SafeMap[T, V]) RangeKey(f func(T) bool) {
+	s.mut.RLock()
+	defer s.mut.RUnlock()
+	for k := range s.m {
+		if !f(k) {
+			break
+		}
+	}
+}
+
 // Swap changes the value for a key. It returns the old value and a boolean indicating if
 // the previous value was available in the map.
 func (s *SafeMap[T, V]) Swap(key T, value V) (previous V, loaded bool) {
 	previous, loaded = s.LoadBool(key)
 	s.Store(key, value)
 	return previous, loaded
+}
+
+// Len returns the length of the underlying map, like len(map).
+func (s *SafeMap[T, V]) Len() int {
+	s.mut.RLock()
+	defer s.mut.RUnlock()
+	return len(s.m)
 }
