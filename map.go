@@ -2,6 +2,8 @@ package safemap
 
 import "sync"
 
+// SafeMap uses a normal map but is thread safe.
+// The map does not implement the sync.Map interface completely.
 type SafeMap[T comparable, V any] struct {
 	mut sync.RWMutex
 	m   map[T]V
@@ -38,6 +40,7 @@ func (s *SafeMap[T, V]) Load(key T) (value V) {
 }
 
 // LoadBool works like: val, ok := map[key] but is thread safe.
+// Use Load if the boolean value is not needed.
 func (s *SafeMap[T, V]) LoadBool(key T) (value V, ok bool) {
 	s.mut.RLock()
 	defer s.mut.RUnlock()
@@ -90,6 +93,7 @@ func (s *SafeMap[T, V]) Swap(key T, value V) (previous V, loaded bool) {
 }
 
 // Len returns the length of the underlying map, like len(map).
+// Len is thread safe.
 func (s *SafeMap[T, V]) Len() int {
 	s.mut.RLock()
 	defer s.mut.RUnlock()
